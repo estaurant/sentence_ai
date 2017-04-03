@@ -1,3 +1,4 @@
 Flask
 gunicorn
 pytz
+https://github.com/jessamynsmith/pyicu-wheels/blob/master/PyICU-1.9.5-cp35-cp35m-macosx_10_6_x86_64.whl?raw=true
