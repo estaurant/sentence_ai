@@ -8,7 +8,7 @@ except ImportError:
 
 
 VERSION = '1.9.5'
-ICU_VERSION = subprocess.check_output(('icu-config', '--version')).strip()
+ICU_VERSION = subprocess.check_output(('icu-config', '--noverify', '--version')).strip()
 
 INCLUDES = {
     'darwin': ['/usr/local/include'],
