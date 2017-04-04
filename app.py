@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, abort
 from datetime import datetime
 import pytz
+from sentence_ai import tokenize
 
 app = Flask(__name__)
 
@@ -22,6 +23,14 @@ def process_sentence(sent):
         abort(500)
     return jsonify({'intent': 'keyword', 'keyword': sent})
 
+@app.route('/tokenize/<sent>', methods=['GET'])
+def tokenize_sentence(sent):
+    if len(sent) == 0:
+        abort(500)
+    tokens = tokenize(sent)
+    print(tokens)
+
+    return jsonify({'intent': 'keyword', 'keyword': tokens})
 
 if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
