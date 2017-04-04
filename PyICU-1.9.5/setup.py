@@ -12,7 +12,7 @@ ICU_VERSION = subprocess.check_output(('icu-config', '--noverify', '--version'))
 
 INCLUDES = {
     'darwin': ['/usr/local/include'],
-    'linux': ['/app/.apt/usr/include'],
+    'linux': [],
     'freebsd': ['/usr/local/include'],
     'win32': ['c:/icu/include'],
     'sunos5': [],
@@ -37,7 +37,7 @@ DEBUG_CFLAGS = {
 
 LFLAGS = {
     'darwin': ['-L/usr/local/lib'],
-    'linux': ['-L/app/.apt/usr/lib'],
+    'linux': [],
     'freebsd': ['-L/usr/local/lib'],
     'win32': ['/LIBPATH:c:/icu/lib'],
     'sunos5': [],
