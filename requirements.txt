@@ -2,3 +2,4 @@ pythainlp
 Flask
 gunicorn
 pytz
+./PyICU-1.9.5
