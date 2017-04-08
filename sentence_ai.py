@@ -50,7 +50,6 @@ def get_intent(the_token_list):
                 return_list.append(Intent.EAT)
             return_list.append(keyword)
 
-            print(return_list)
             return return_list
 
 
@@ -60,4 +59,6 @@ example_sentence3 = "้รู้สึกไม่อยากกินข้�
 print(pythainlp.postaggers.tag(example_sentence))
 token_list = get_token(example_sentence)
 
-get_intent(token_list)
+the_real_intent = get_intent(token_list)
+print("Intent  : {}".format(the_real_intent[0].name))
+print("Keyword : {}".format(the_real_intent[1]))
