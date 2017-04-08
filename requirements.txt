@@ -1,3 +1,4 @@
+pythainlp
 Flask
 gunicorn
 pytz
