@@ -7,6 +7,7 @@ from Intent import Intent
 
 
 def get_token(sentence):
+    sentence = sentence.strip()
     tag_list = pythainlp.postaggers.tag(sentence)
     temp_token_list = []
     for anElement in tag_list:
@@ -32,7 +33,7 @@ greeting_words = ["สวัสดี", "hello", "hi"]
 def get_intent(the_token_list):
     lexeme_list = []
     tag_list = []
-    return_list = []
+    return_list = [Intent.DEFAULT, Intent.DEFAULT.value]
     for a_token in the_token_list:
         lexeme_list.append(a_token.get_lexeme())
     for a_token in the_token_list:
@@ -44,10 +45,10 @@ def get_intent(the_token_list):
     for a_greeting_word in greeting_words:
         if a_greeting_word.lower() in [x.lower() for x in lexeme_list]:
             if Tag.NEG.name in tag_list:
-                return_list.append(Intent.GREETING_NEG)
+                return_list[0] = Intent.GREETING_NEG
             else:
-                return_list.append(Intent.GREETING)
-            return_list.append("")
+                return_list[0] = Intent.GREETING
+            return_list[1] = ""
             return return_list
 
     if (Tag.XVMM.name or Tag.VSTA.name in tag_list) and Tag.VACT.name in tag_list:
@@ -55,33 +56,35 @@ def get_intent(the_token_list):
             verb = lexeme_list[(tag_list.index(Tag.VACT.name))]
             print("verb : " + verb)
             if verb == "กิน":
-                keyword = ''.join(lexeme_list[lexeme_list.index(verb) + 1:])
+                keyword = ''.join(lexeme_list[lexeme_list.index(verb) + 1:]).strip()
                 print("keyword : " + keyword)
                 if tag_list[(tag_list.index(Tag.VACT.name) - 2)] == Tag.NEG.name:
-                    return_list.append(Intent.EAT_NEG)
+                    return_list[0] = Intent.EAT_NEG
                 else:
-                    return_list.append(Intent.EAT)
-                return_list.append(keyword)
+                    return_list[0] = Intent.EAT
+                return_list[1] = keyword
 
                 return return_list
+            else:
+                print("No verb is matched")
+                return return_list
         except ValueError:
-            return_list.append(Intent.DEFAULT)
-            return_list.append(Intent.DEFAULT.name)
             return return_list
     else:
-        return_list.append(Intent.DEFAULT)
-        return_list.append(Intent.DEFAULT.name)
+        print("DEFAULT")
         return return_list
 
 
 example_sentence = "อยากกินข้าวมันไก่เนื้อๆ"
 example_sentence2 = "ชอบกินข้าวมันไก่เนื้อๆ"
-example_sentence3 = "้รู้สึกไม่อยากกินข้าวมันไก่เนื้อๆ"
+example_sentence3 = "รู้สึกไม่อยากกินข้าวมันไก่เนื้อๆ"
 example_greeting = "สวัสดี"
 example_greeting2 = "HeLlo"
 example_greeting3 = "hI"
-print(pythainlp.postaggers.tag(example_greeting3))
-token_list = get_token(example_greeting3)
+example_test = "วันนึ้รีบกินไรดี"
+example_food1 = "  อยากกิน ส้มตำ  "
+#print(pythainlp.postaggers.tag(example_food1.strip()))
+token_list = get_token(example_test)
 
 the_real_intent = get_intent(token_list)
 print("Intent  : {}".format(the_real_intent[0].name))
