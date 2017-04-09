@@ -15,6 +15,9 @@ class Tag(Enum):
     XVAE = "Post - verb auxiliary"
     XVMM = "Pre - verb before or after negator 'ไม่'"
 
+    RPRE = "Preposition"
+    JSBR = "Subordinating conjunction"
+
     NEG = "Negator"
 
     NONE = "None"

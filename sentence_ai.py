@@ -51,7 +51,8 @@ def get_intent(the_token_list):
             return_list[1] = ""
             return return_list
 
-    if (Tag.XVMM.name or Tag.VSTA.name in tag_list) and Tag.VACT.name in tag_list:
+    if (Tag.XVMM.name in tag_list or Tag.VSTA.name in tag_list) and Tag.VACT.name in tag_list:
+        print("AAA")
         try:
             verb = lexeme_list[(tag_list.index(Tag.VACT.name))]
             print("verb : " + verb)
@@ -70,6 +71,26 @@ def get_intent(the_token_list):
                 return return_list
         except ValueError:
             return return_list
+    elif Tag.VACT.name in tag_list:
+        try:
+            verb = lexeme_list[(tag_list.index(Tag.VACT.name))]
+            print("verb : " + verb)
+            if verb == "แนะนำ":
+                return_list[0] = Intent.RECOMMEND
+                lexeme_setence = ''.join(lexeme_list[:])
+                if "ถูก" in lexeme_setence:
+                    return_list[1] = "expensive" if Tag.NEG.name in tag_list else "cheap"
+                    return return_list
+                elif "แพง" in lexeme_setence:
+                    return_list[1] = "cheap" if Tag.NEG.name in tag_list else "expensive"
+                    return return_list
+                else:
+                    return return_list
+            else:
+                print("No verb is matched")
+                return return_list
+        except ValueError:
+            return return_list
     else:
         print("DEFAULT")
         return return_list
@@ -83,8 +104,11 @@ example_greeting2 = "HeLlo"
 example_greeting3 = "hI"
 example_test = "วันนึ้รีบกินไรดี"
 example_food1 = "  อยากกิน ส้มตำ  "
-#print(pythainlp.postaggers.tag(example_food1.strip()))
-token_list = get_token(example_test)
+
+example_recommend1 = "แนะนำของกินไม่ถูกให้หน่อย"
+example_recommend2 = "แนะนำของกินถูกๆ"
+print(pythainlp.postaggers.tag(example_recommend1.strip()))
+token_list = get_token(example_recommend1)
 
 the_real_intent = get_intent(token_list)
 print("Intent  : {}".format(the_real_intent[0].name))
