@@ -66,6 +66,14 @@ def get_intent(the_token_list):
                     return_list[0] = Intent.RECOMMEND
                     return_list[1] = "cheap" if Tag.NEG.name in tag_list else "expensive"
                     return return_list
+                elif "รีบ" in lexeme_list or "เร็ว" in lexeme_list or "ใกล้":
+                    return_list[0] = Intent.RECOMMEND
+                    return_list[1] = "far" if Tag.NEG.name in tag_list else "near"
+                    return return_list
+                elif "ไกล" in lexeme_list:
+                    return_list[0] = Intent.RECOMMEND
+                    return_list[1] = "near" if Tag.NEG.name in tag_list else "far"
+                    return return_list
                 else:
                     if tag_list[(tag_list.index(Tag.VACT.name) - 2)] == Tag.NEG.name:
                         return_list[0] = Intent.EAT_NEG
@@ -81,9 +89,7 @@ def get_intent(the_token_list):
             return return_list
     elif Tag.VACT.name in tag_list:
         try:
-            verb = lexeme_list[(tag_list.index(Tag.VACT.name))]
-            print("verb : " + verb)
-            if verb == "แนะนำ":
+            if "แนะนำ" in lexeme_list:
                 return_list[0] = Intent.RECOMMEND
                 lexeme_setence = ''.join(lexeme_list[:])
                 if "ถูก" in lexeme_setence:
@@ -94,6 +100,14 @@ def get_intent(the_token_list):
                     return return_list
                 else:
                     return return_list
+            elif "รีบ" in lexeme_list or "เร็ว" in lexeme_list or "ใกล้":
+                return_list[0] = Intent.RECOMMEND
+                return_list[1] = "far" if Tag.NEG.name in tag_list else "near"
+                return return_list
+            elif "ไกล" in lexeme_list:
+                return_list[0] = Intent.RECOMMEND
+                return_list[1] = "near" if Tag.NEG.name in tag_list else "far"
+                return return_list
             else:
                 print("No verb is matched")
                 return return_list
@@ -114,10 +128,16 @@ example_test = "วันนึ้รีบกินไรดี"
 example_food1 = "  อยากกิน ส้มตำ  "
 
 example_recommend1 = "แนะนำของกินไม่ถูกให้หน่อย"
-example_recommend2 = "แนะนำของกินถูกๆ"
+example_recommend2 = "แนะนำของกินไม่ถูก"
 example_recommend3 = "ไม่อยากกินของแพงๆ"
-print(pythainlp.postaggers.tag(example_recommend3.strip()))
-token_list = get_token(example_recommend3)
+
+example_distance1 = "วันนี้รีบกินอะไรดี"
+example_distance2 = "วันนี้ไม่รีบ กินไรดี"
+example_distance3 = "อยากกินร้านอาหารใกล้ๆ"
+example_distance4 = "ไม่ค่อยรีบอะกินไหนก็ได้"
+
+print(pythainlp.postaggers.tag(example_distance4.strip()))
+token_list = get_token(example_distance4)
 
 the_real_intent = get_intent(token_list)
 print("Intent  : {}".format(the_real_intent[0].name))
