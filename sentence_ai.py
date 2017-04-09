@@ -55,6 +55,7 @@ def get_intent(the_token_list):
         try:
             verb = lexeme_list[(tag_list.index(Tag.VACT.name))]
             print("verb : " + verb)
+            lexeme_setence = ''.join(lexeme_list[:])
             if verb == "กิน":
                 keyword = ''.join(lexeme_list[lexeme_list.index(verb) + 1:]).strip()
                 print("keyword : " + keyword)
@@ -66,15 +67,18 @@ def get_intent(the_token_list):
                     return_list[0] = Intent.RECOMMEND
                     return_list[1] = "cheap" if Tag.NEG.name in tag_list else "expensive"
                     return return_list
-                elif "รีบ" in lexeme_list or "เร็ว" in lexeme_list or "ใกล้":
+                elif "รีบ" in lexeme_setence or "เร็ว" in lexeme_setence or "ใกล้" in lexeme_setence:
+                    print("ss")
                     return_list[0] = Intent.RECOMMEND
                     return_list[1] = "far" if Tag.NEG.name in tag_list else "near"
                     return return_list
-                elif "ไกล" in lexeme_list:
+                elif "ไกล" in lexeme_setence:
+                    print("ssTT")
                     return_list[0] = Intent.RECOMMEND
                     return_list[1] = "near" if Tag.NEG.name in tag_list else "far"
                     return return_list
                 else:
+                    print("ssTTAA")
                     if tag_list[(tag_list.index(Tag.VACT.name) - 2)] == Tag.NEG.name:
                         return_list[0] = Intent.EAT_NEG
                     else:
@@ -89,9 +93,9 @@ def get_intent(the_token_list):
             return return_list
     elif Tag.VACT.name in tag_list:
         try:
+            lexeme_setence = ''.join(lexeme_list[:])
             if "แนะนำ" in lexeme_list:
                 return_list[0] = Intent.RECOMMEND
-                lexeme_setence = ''.join(lexeme_list[:])
                 if "ถูก" in lexeme_setence:
                     return_list[1] = "expensive" if Tag.NEG.name in tag_list else "cheap"
                     return return_list
@@ -100,11 +104,11 @@ def get_intent(the_token_list):
                     return return_list
                 else:
                     return return_list
-            elif "รีบ" in lexeme_list or "เร็ว" in lexeme_list or "ใกล้":
+            elif "รีบ" in lexeme_setence or "เร็ว" in lexeme_setence or "ใกล้" in lexeme_setence:
                 return_list[0] = Intent.RECOMMEND
                 return_list[1] = "far" if Tag.NEG.name in tag_list else "near"
                 return return_list
-            elif "ไกล" in lexeme_list:
+            elif "ไกล" in lexeme_setence:
                 return_list[0] = Intent.RECOMMEND
                 return_list[1] = "near" if Tag.NEG.name in tag_list else "far"
                 return return_list
@@ -135,9 +139,10 @@ example_distance1 = "วันนี้รีบกินอะไรดี"
 example_distance2 = "วันนี้ไม่รีบ กินไรดี"
 example_distance3 = "อยากกินร้านอาหารใกล้ๆ"
 example_distance4 = "ไม่ค่อยรีบอะกินไหนก็ได้"
+example_distance5 = "ไม่อยากกินร้านไกลๆ"
 
-print(pythainlp.postaggers.tag(example_distance4.strip()))
-token_list = get_token(example_distance4)
+print(pythainlp.postaggers.tag(example_sentence3.strip()))
+token_list = get_token(example_sentence3)
 
 the_real_intent = get_intent(token_list)
 print("Intent  : {}".format(the_real_intent[0].name))
