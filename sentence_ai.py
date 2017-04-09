@@ -52,17 +52,25 @@ def get_intent(the_token_list):
             return return_list
 
     if (Tag.XVMM.name in tag_list or Tag.VSTA.name in tag_list) and Tag.VACT.name in tag_list:
-        print("AAA")
         try:
             verb = lexeme_list[(tag_list.index(Tag.VACT.name))]
             print("verb : " + verb)
             if verb == "กิน":
                 keyword = ''.join(lexeme_list[lexeme_list.index(verb) + 1:]).strip()
                 print("keyword : " + keyword)
-                if tag_list[(tag_list.index(Tag.VACT.name) - 2)] == Tag.NEG.name:
-                    return_list[0] = Intent.EAT_NEG
+                if "ถูก" in keyword:
+                    return_list[0] = Intent.RECOMMEND
+                    return_list[1] = "expensive" if Tag.NEG.name in tag_list else "cheap"
+                    return return_list
+                elif "แพง" in keyword:
+                    return_list[0] = Intent.RECOMMEND
+                    return_list[1] = "cheap" if Tag.NEG.name in tag_list else "expensive"
+                    return return_list
                 else:
-                    return_list[0] = Intent.EAT
+                    if tag_list[(tag_list.index(Tag.VACT.name) - 2)] == Tag.NEG.name:
+                        return_list[0] = Intent.EAT_NEG
+                    else:
+                        return_list[0] = Intent.EAT
                 return_list[1] = keyword
 
                 return return_list
@@ -107,8 +115,9 @@ example_food1 = "  อยากกิน ส้มตำ  "
 
 example_recommend1 = "แนะนำของกินไม่ถูกให้หน่อย"
 example_recommend2 = "แนะนำของกินถูกๆ"
-print(pythainlp.postaggers.tag(example_recommend1.strip()))
-token_list = get_token(example_recommend1)
+example_recommend3 = "ไม่อยากกินของแพงๆ"
+print(pythainlp.postaggers.tag(example_recommend3.strip()))
+token_list = get_token(example_recommend3)
 
 the_real_intent = get_intent(token_list)
 print("Intent  : {}".format(the_real_intent[0].name))
